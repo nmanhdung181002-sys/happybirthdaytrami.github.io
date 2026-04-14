@@ -1,3 +1,6 @@
+import { Cake3DManager } from '../../presentation/renderers/three/Cake3DManager.js';
+import { Balloons3DManager } from '../../presentation/renderers/three/Balloons3DManager.js';
+
 /**
  * Three.js 3D Scene — Birthday Landing v3.0 PREMIUM
  * ✦ Galaxy spiral particle system (2000 particles with arms)
@@ -9,6 +12,7 @@
  * ✦ Custom bloom glow shader pipeline
  * ✦ Fireworks V2 (ring + trail + sparkle)
  * ✦ Confetti V2 (3D geometry pieces)
+ * ✦ Cake 3D & Balloons (InstancedMesh)
  * ✦ Mouse-reactive parallax camera + gyroscope mobile
  * ✦ Performance: adaptive quality, RAF throttle
  */
@@ -600,7 +604,7 @@ export class ThreeJsService {
     });
     const pts = new THREE.Points(geo, mat);
     scene.add(pts);
-    fwParticles.push({ pts, vel, life: 1, decay: 0.005, gravity: true });
+    fwParticles.push({ pts, vel, life: 1, decay: 0.002, gravity: true, isConfetti: true });
   };
 
   // ── BUBBLE BURST ──
@@ -633,6 +637,10 @@ export class ThreeJsService {
       animBubble();
     }
   };
+
+  // ── INJECT CAKE & BALLOONS ──
+  const cakeManager = new Cake3DManager(scene);
+  const balloonsManager = new Balloons3DManager(scene, isMobile ? 25 : 55);
 
   // ── MOUSE / GYROSCOPE ──
   let mouseX = 0, mouseY = 0;
@@ -706,6 +714,10 @@ export class ThreeJsService {
       // Shooting stars
       updateShootingStars();
 
+      // Update Cake & Balloons
+      cakeManager.update(t);
+      balloonsManager.update(t);
+
       // Rings
       rings.forEach(r => {
         r.mesh.rotation.z += r.speed * 0.015 * r.dir;
@@ -725,7 +737,12 @@ export class ThreeJsService {
           fw.vel[j] *= 0.97;
           fw.vel[j + 1] *= 0.97;
           fw.vel[j + 2] *= 0.97;
-          if (fw.gravity) fw.vel[j + 1] -= 0.04;
+          if (fw.gravity) fw.vel[j + 1] -= (fw.isConfetti ? 0.015 : 0.04);
+          if (fw.isConfetti) {
+             // Mắc nhiễu gió xoáy curl noise nhẹ cho confetti
+             fw.vel[j] += Math.sin(t * 3 + arr[j+1]*0.1) * 0.01;
+             fw.vel[j+2] += Math.cos(t * 2 + arr[j]*0.1) * 0.01;
+          }
         }
         fw.pts.geometry.attributes.position.needsUpdate = true;
         if (fw.life <= 0) {
