@@ -10,6 +10,7 @@ import { MusicController } from '../../presentation/controllers/MusicController.
 import { LayoutController } from '../../presentation/controllers/LayoutController.js';
 import { GalleryController } from '../../presentation/controllers/GalleryController.js';
 import { InteractiveController } from '../../presentation/controllers/InteractiveController.js';
+import { TimelineController } from '../../presentation/controllers/TimelineController.js';
 import { CatRenderer } from '../../presentation/renderers/CatRenderer.js';
 import { ChibiCatsRenderer } from '../../presentation/renderers/ChibiCatsRenderer.js';
 
@@ -34,6 +35,7 @@ export const container = {
         const musicController = new MusicController(toggleMusicUseCase);
         const galleryController = new GalleryController();
         const interactiveController = new InteractiveController();
+        const timelineController = new TimelineController();
         const catRenderer = new CatRenderer();
         const chibiCatsRenderer = new ChibiCatsRenderer();
 
@@ -43,6 +45,7 @@ export const container = {
         musicController.init();
         galleryController.init();
         interactiveController.init();
+        timelineController.init();
         
         // Khởi động renderers / background
         try {

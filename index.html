@@ -14,6 +14,8 @@
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,700&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 </head>
@@ -100,7 +102,7 @@
     <!-- ── HERO ── -->
     <section id="hero" class="s-hero" aria-labelledby="h-title">
       <div class="hero-bg">
-        <img id="hbg" src="https://picsum.photos/seed/bloom2026/1920/1080" alt="" width="1920" height="1080"
+        <img id="hbg" src="images/hero-bg.jpg" alt="" width="1920" height="1080"
           fetchpriority="high">
         <div class="hbg-scrim"></div>
       </div>
@@ -156,17 +158,17 @@
         <div class="about-grid">
           <div class="about-left rev">
             <div class="photo-frame">
-              <img src="https://picsum.photos/seed/trami-f1/480/600" alt="Ảnh Nguyễn Trà Mi" width="480" height="600"
+              <img src="images/about-img.jpg" alt="Ảnh Nguyễn Trà Mi" width="480" height="600"
                 loading="lazy">
               <div class="photo-shine" aria-hidden="true"></div>
               <div class="photo-badge"><i data-lucide="sparkles" aria-hidden="true"></i></div>
             </div>
-            <div class="stat-row" aria-label="Đặc điểm nổi bật">
+            <!-- <div class="stat-row" aria-label="Đặc điểm nổi bật">
               <div class="stat tilt-card"><span class="sn">∞</span><span class="sl">Yêu thương</span></div>
               <div class="stat tilt-card"><span class="sn">100%</span><span class="sl">Chân thật</span></div>
               <div class="stat tilt-card"><span class="sn"><i data-lucide="heart" aria-hidden="true"></i></span><span
                   class="sl">Đáng yêu</span></div>
-            </div>
+            </div> -->
           </div>
           <div class="about-right rev d2">
             <blockquote class="quote">
@@ -185,7 +187,7 @@
               <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="coffee"></i></span><span>Sống chậm,
                   cảm sâu</span></li>
               <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="music"></i></span><span>Yêu âm
-                  nhạc</span></li>
+                  nhạc & mèooo</span></li>
               <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="feather"></i></span><span>Dịu dàng,
                   đáng yêu</span></li>
             </ul>
@@ -204,41 +206,36 @@
         </header>
         <div class="polaroid-scatter">
           <div class="polaroid rev" style="--rot:-5deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav1/300/300" alt="Trà sữa" loading="lazy"
+            <div class="pol-img"><img src="images/fav-meo.jpg" alt="Mèo và võ mèo" loading="lazy"
                 width="300" height="300"></div>
-            <p class="pol-cap">Trà sữa &hearts;</p>
+            <p class="pol-cap">Mèo & võ mèo&hearts;</p>
             <span class="pol-sticker">🧋</span>
           </div>
           <div class="polaroid rev d1" style="--rot:4deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav2/300/300" alt="Xem phim" loading="lazy"
+            <div class="pol-img"><img src="images/fav-grab.jpg" alt="Chạy grap" loading="lazy"
                 width="300" height="300"></div>
-            <p class="pol-cap">Phim hay cuối tuần</p>
+            <p class="pol-cap">Chạy grap</p>
             <span class="pol-sticker">🎬</span>
           </div>
           <div class="polaroid rev d2" style="--rot:-3deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav3/300/300" alt="Đọc sách" loading="lazy"
+            <div class="pol-img"><img src="images/fav-atsayhi.jpg" alt="Anh trai say hi" loading="lazy"
                 width="300" height="300"></div>
-            <p class="pol-cap">Sách &amp; Cà phê</p>
+            <p class="pol-cap">Anh trai say hi</p>
             <span class="pol-sticker">📖</span>
           </div>
           <div class="polaroid rev d1" style="--rot:6deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav4/300/300" alt="Du lịch" loading="lazy"
+            <div class="pol-img"><img src="images/fav-chef.jpg" alt="Đầu bếp" loading="lazy"
                 width="300" height="300"></div>
-            <p class="pol-cap">Đi đâu cũng vui</p>
+            <p class="pol-cap">Đầu bếp</p>
             <span class="pol-sticker">✈️</span>
           </div>
           <div class="polaroid rev d2" style="--rot:-4deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav5/300/300" alt="Âm nhạc" loading="lazy"
+            <div class="pol-img"><img src="images/fav-gamer.jpg" alt="Game thủ" loading="lazy"
                 width="300" height="300"></div>
-            <p class="pol-cap">Nhạc chill mọi lúc</p>
+            <p class="pol-cap">Game thủ</p>
             <span class="pol-sticker">🎵</span>
           </div>
-          <div class="polaroid rev d3" style="--rot:3deg">
-            <div class="pol-img"><img src="https://picsum.photos/seed/mifav6/300/300" alt="Nấu ăn" loading="lazy"
-                width="300" height="300"></div>
-            <p class="pol-cap">Nấu ăn tại nhà</p>
-            <span class="pol-sticker">🍳</span>
-          </div>
+         
         </div>
       </div>
     </section>
@@ -253,34 +250,23 @@
         </header>
         <div class="mosaic" role="list">
           <figure class="mo mo-lg rev" role="listitem" tabindex="0" data-index="0">
-            <img src="https://picsum.photos/seed/trami-g1/600/780" alt="Kỷ niệm 1" width="600" height="780"
-              loading="lazy">
+            <img src="images/gallery-1.jpg" alt="Kỷ niệm 1" width="600" height="780" loading="lazy">
             <figcaption class="mo-cap">Khoảnh khắc yêu 🌸</figcaption>
           </figure>
-          <div class="mo-col">
+          <div class="mo-col mo-lg">
             <figure class="mo rev d1" role="listitem" tabindex="0" data-index="1">
-              <img src="https://picsum.photos/seed/trami-g2/600/440" alt="Kỷ niệm 2" width="600" height="440"
-                loading="lazy">
+              <img src="images/gallery-2.jpg" alt="Kỷ niệm 2" width="600" height="440" loading="lazy">
               <figcaption class="mo-cap">Ngày tháng rực rỡ ✨</figcaption>
             </figure>
             <figure class="mo rev d2" role="listitem" tabindex="0" data-index="2">
-              <img src="https://picsum.photos/seed/trami-g3/600/440" alt="Kỷ niệm 3" width="600" height="440"
-                loading="lazy">
+              <img src="images/gallery-3-v2.jpg" alt="Kỷ niệm 3" width="600" height="440" loading="lazy">
               <figcaption class="mo-cap">Nụ cười rạng rỡ 💕</figcaption>
             </figure>
           </div>
-          <div class="mo-col">
-            <figure class="mo rev d1" role="listitem" tabindex="0" data-index="3">
-              <img src="https://picsum.photos/seed/trami-g4/600/440" alt="Kỷ niệm 4" width="600" height="440"
-                loading="lazy">
-              <figcaption class="mo-cap">Cùng nhau lớn 🌿</figcaption>
-            </figure>
-            <figure class="mo rev d2" role="listitem" tabindex="0" data-index="4">
-              <img src="https://picsum.photos/seed/trami-g5/600/440" alt="Kỷ niệm 5" width="600" height="440"
-                loading="lazy">
-              <figcaption class="mo-cap">Hành trình tương lai 🚀</figcaption>
-            </figure>
-          </div>
+          <figure class="mo mo-lg rev d1" role="listitem" tabindex="0" data-index="3">
+            <img src="images/gallery-4.jpg" alt="Kỷ niệm 4" width="600" height="780" loading="lazy">
+            <figcaption class="mo-cap">Hành trình tương lai 🚀</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -348,55 +334,47 @@
           <p class="eyebrow rev">✦ &nbsp;Her Story&nbsp; ✦</p>
           <h2 id="tl-h" class="sec-title rev">Hành Trình Của Mi</h2>
         </header>
-        <div class="tl-track">
-          <div class="tl-line" aria-hidden="true"></div>
-          <ol class="tl-list" aria-label="Dòng thời gian">
-            <li class="tl-item tl-l rev" style="--i:0">
-              <div class="tl-dot" aria-hidden="true"><i data-lucide="seedling"></i></div>
+        <!-- Swiper Container -->
+        <div class="swiper timeline-swiper">
+          <div class="swiper-wrapper" aria-label="Dòng thời gian">
+            <div class="swiper-slide rev">
               <div class="tl-card tilt-card">
                 <span class="tl-era">Thuở Bé</span>
                 <h3 class="tl-title">Cô Bé Đặc Biệt Ra Đời</h3>
-                <p class="tl-text">Ngày 30/6, thế giới đẹp hơn khi Trà Mi xuất hiện với đôi mắt sáng và nụ cười không ai
-                  quên.</p>
+                <p class="tl-text">Ngày 30/6, thế giới đẹp hơn khi Trà Mi xuất hiện với đôi mắt sáng và nụ cười không ai quên.</p>
               </div>
-            </li>
-            <li class="tl-item tl-r rev d1" style="--i:1">
-              <div class="tl-dot" aria-hidden="true"><i data-lucide="book-open"></i></div>
+            </div>
+            <div class="swiper-slide rev d1">
               <div class="tl-card tilt-card">
                 <span class="tl-era">Thanh Xuân</span>
                 <h3 class="tl-title">Tháng Năm Học Trò</h3>
-                <p class="tl-text">Tuổi học sinh ngọt ngào, những trang sách và bài học đầu tiên về cuộc đời bắt đầu
-                  được viết nên.</p>
+                <p class="tl-text">Tuổi học sinh ngọt ngào, những trang sách và bài học đầu tiên về cuộc đời bắt đầu được viết nên.</p>
               </div>
-            </li>
-            <li class="tl-item tl-l rev d2" style="--i:2">
-              <div class="tl-dot" aria-hidden="true"><i data-lucide="wind"></i></div>
+            </div>
+            <div class="swiper-slide rev d2">
               <div class="tl-card tilt-card">
                 <span class="tl-era">Trưởng Thành</span>
                 <h3 class="tl-title">Bay Theo Đam Mê</h3>
-                <p class="tl-text">Bước vào đời với bản lĩnh riêng, không ngại thử thách, không sợ khác biệt — đó là Trà
-                  Mi.</p>
+                <p class="tl-text">Bước vào đời với bản lĩnh riêng, không ngại thử thách, không sợ khác biệt — đó là Trà Mi.</p>
               </div>
-            </li>
-            <li class="tl-item tl-r rev d1" style="--i:3">
-              <div class="tl-dot" aria-hidden="true"><i data-lucide="star"></i></div>
+            </div>
+            <div class="swiper-slide rev d1">
               <div class="tl-card tilt-card">
                 <span class="tl-era">Hôm Nay</span>
                 <h3 class="tl-title">Năm Tháng Rực Rỡ Nhất</h3>
-                <p class="tl-text">Mỗi ngày qua Mi đều trở nên đẹp hơn, mạnh mẽ hơn và đáng yêu hơn. Chúc mừng tuổi mới!
-                </p>
+                <p class="tl-text">Mỗi ngày qua Mi đều trở nên đẹp hơn, mạnh mẽ hơn và đáng yêu hơn. Chúc mừng tuổi mới!</p>
               </div>
-            </li>
-            <li class="tl-item tl-l rev d2" style="--i:4">
-              <div class="tl-dot" aria-hidden="true"><i data-lucide="rocket"></i></div>
+            </div>
+            <div class="swiper-slide rev d2">
               <div class="tl-card tilt-card">
                 <span class="tl-era">Tương Lai</span>
                 <h3 class="tl-title">Hành Trình Sắp Tới</h3>
-                <p class="tl-text">Cả một bầu trời rộng lớn đang chờ Mi chinh phục — với tình yêu và lời chúc từ mọi
-                  người.</p>
+                <p class="tl-text">Cả một bầu trời rộng lớn đang chờ Mi chinh phục — với tình yêu và lời chúc từ mọi người.</p>
               </div>
-            </li>
-          </ol>
+            </div>
+          </div>
+          <!-- Phân trang 3D Swiper -->
+          <div class="swiper-pagination"></div>
         </div>
       </div>
     </section>
