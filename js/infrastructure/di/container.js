@@ -1,4 +1,5 @@
 import { TimeCalculator } from '../../domain/rules/TimeCalculator.js';
+import { TimeLockRule } from '../../domain/rules/TimeLockRule.js';
 import { GetCountdownUseCase } from '../../application/use-cases/GetCountdownUseCase.js';
 import { ToggleMusicUseCase } from '../../application/use-cases/ToggleMusicUseCase.js';
 
@@ -11,6 +12,7 @@ import { LayoutController } from '../../presentation/controllers/LayoutControlle
 import { GalleryController } from '../../presentation/controllers/GalleryController.js';
 import { InteractiveController } from '../../presentation/controllers/InteractiveController.js';
 import { TimelineController } from '../../presentation/controllers/TimelineController.js';
+import { TimeLockController } from '../../presentation/controllers/TimeLockController.js';
 import { CatRenderer } from '../../presentation/renderers/CatRenderer.js';
 import { ChibiCatsRenderer } from '../../presentation/renderers/ChibiCatsRenderer.js';
 
@@ -20,16 +22,34 @@ import { ChibiCatsRenderer } from '../../presentation/renderers/ChibiCatsRendere
  * Ngăn chặn dependency hell và tuân thủ chặt chẽ Clean Architecture.
  */
 export const container = {
-    init: () => {
+    /**
+     * ═══════════════════════════════════════════════
+     *  🔧 CẤU HÌNH KHOÁ — SỬA Ở ĐÂY ĐỂ BẬT/TẮT
+     *  true  = LUÔN KHOÁ (ẩn nội dung)
+     *  false = LUÔN MỞ   (hiện nội dung, dùng để debug)
+     *  null  = TỰ ĐỘNG   (dựa theo ngày 30/6 + server time)
+     * ═══════════════════════════════════════════════
+     */
+    FORCE_LOCK: null,
+
+    init: async function () {
         // 1. Khởi tạo Infrastructure Services (Adapters)
         const audioService = new BrowserAudioService('bg-music');
         const threeJsService = new ThreeJsService();
 
-        // 2. Khởi tạo Application Use Cases, inject qua Constructor
+        // 2. Khởi tạo Domain Rules
+        const timeLockRule = new TimeLockRule(5, 30, this.FORCE_LOCK); // Tháng 6 (0-indexed = 5), Ngày 30
+
+        // Verify thời gian thật từ server trước khi quyết định khoá/mở
+        if (this.FORCE_LOCK === null) {
+            await timeLockRule.verifyServerTime();
+        }
+
+        // 3. Khởi tạo Application Use Cases, inject qua Constructor
         const getCountdownUseCase = new GetCountdownUseCase(5, 30); // Tháng 6 là 5 (0-indexed), Ngày 30
         const toggleMusicUseCase = new ToggleMusicUseCase(audioService);
 
-        // 3. Khởi tạo Presentation Controllers, inject Use Cases
+        // 4. Khởi tạo Presentation Controllers, inject Use Cases
         const layoutController = new LayoutController();
         const countdownController = new CountdownController(getCountdownUseCase);
         const musicController = new MusicController(toggleMusicUseCase);
@@ -39,14 +59,26 @@ export const container = {
         const catRenderer = new CatRenderer();
         const chibiCatsRenderer = new ChibiCatsRenderer();
 
-        // 4. Mount / Khởi chạy
+        // TimeLock: khoá các section Gallery, Wishes, Letter, Send Love trước ngày 30/6
+        const timeLockController = new TimeLockController(timeLockRule, [
+            'faves',      // Những Điều Mi Thích
+            'gallery',    // Kỷ Niệm Đẹp
+            'wishes',     // Lời Chúc Từ Trái Tim
+            'timeline',   // Her Story — Hành Trình Của Mi
+            'letter',     // Tâm Thư
+            'send-love',   // Gửi Yêu Thương
+            'about'
+        ]);
+
+        // 5. Mount / Khởi chạy
+        timeLockController.init(); // Phải chạy trước để khoá trước khi các controller khác khởi động
         layoutController.init();
         countdownController.init();
         musicController.init();
         galleryController.init();
         interactiveController.init();
         timelineController.init();
-        
+
         // Khởi động renderers / background
         try {
             threeJsService.init();
