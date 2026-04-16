@@ -2,6 +2,8 @@
  * Presentation Controller: Quản lý việc khoá/mở khoá các section trên giao diện.
  * Nếu chưa đến ngày sinh nhật thì một số section sẽ bị che bởi overlay khoá.
  * 
+ * Khi countdown hero chạm 0 → hiệu ứng mở khoá đặc biệt + khôi phục nội dung.
+ * 
  * Bảo vệ chống xoá qua DevTools (F12):
  * - Ẩn nội dung gốc, không chỉ đè overlay
  * - MutationObserver tự khôi phục overlay nếu bị xoá
@@ -16,6 +18,10 @@ export class TimeLockController {
         this.timeLockRule = timeLockRule;
         this.lockedSectionIds = lockedSectionIds;
         this._originalContents = new Map(); // Lưu nội dung gốc
+        this._observers = [];
+        this._antiTamperInterval = null;
+        this._lockCountdownInterval = null;
+        this._unlocked = false;
     }
 
     init() {
@@ -26,6 +32,9 @@ export class TimeLockController {
         this._applyLocks();
         this._lockNavLinks();
         this._startAntiTamper();
+
+        // Lắng nghe sự kiện mở khoá từ CountdownController
+        window.addEventListener('birthday-unlocked', () => this._performUnlock(), { once: true });
     }
 
     /**
@@ -95,6 +104,7 @@ export class TimeLockController {
             navLink.appendChild(lockBadge);
 
             navLink.addEventListener('click', (e) => {
+                if (this._unlocked) return; // Cho phép click nếu đã mở khoá
                 e.preventDefault();
                 this._showLockToast();
             });
@@ -127,20 +137,17 @@ export class TimeLockController {
     }
 
     /**
-     * Chống xoá qua DevTools:
-     * - MutationObserver theo dõi thay đổi DOM
-     * - Kiểm tra định kỳ mỗi 2 giây
+     * Chống xoá qua DevTools
      */
     _startAntiTamper() {
-        // MutationObserver: nếu overlay bị xoá hoặc section bị sửa → khôi phục
         this.lockedSectionIds.forEach(sectionId => {
             const section = document.getElementById(sectionId);
             if (!section) return;
 
             const observer = new MutationObserver(() => {
+                if (this._unlocked) return; // Bỏ qua nếu đã mở khoá
                 const overlay = section.querySelector('.lock-overlay');
                 if (!overlay) {
-                    // Overlay bị xoá → xoá hết nội dung và chèn lại overlay
                     section.innerHTML = '';
                     section.classList.add('section-locked');
                     this._insertLockOverlay(section, sectionId);
@@ -153,10 +160,12 @@ export class TimeLockController {
                 attributes: true,
                 attributeFilter: ['class', 'style']
             });
+
+            this._observers.push(observer);
         });
 
-        // Kiểm tra định kỳ mỗi 2 giây
-        setInterval(() => {
+        this._antiTamperInterval = setInterval(() => {
+            if (this._unlocked) return;
             this.lockedSectionIds.forEach(sectionId => {
                 const section = document.getElementById(sectionId);
                 if (!section) return;
@@ -181,7 +190,8 @@ export class TimeLockController {
             const diff = unlock.getTime() - now.getTime();
 
             if (diff <= 0) {
-                location.reload();
+                // Dispatch event để trigger unlock
+                window.dispatchEvent(new CustomEvent('birthday-unlocked'));
                 return;
             }
 
@@ -201,6 +211,127 @@ export class TimeLockController {
         };
 
         update();
-        setInterval(update, 1000);
+        this._lockCountdownInterval = setInterval(update, 1000);
+    }
+
+    // ═══════════════════════════════════════
+    //  🎉 MỞ KHOÁ VỚI HIỆU ỨNG ĐẶC BIỆT
+    // ═══════════════════════════════════════
+
+    /**
+     * Thực hiện mở khoá tất cả sections với hiệu ứng celebration
+     */
+    _performUnlock() {
+        if (this._unlocked) return;
+        this._unlocked = true;
+
+        // 1. Tắt anti-tamper
+        this._observers.forEach(o => o.disconnect());
+        this._observers = [];
+        if (this._antiTamperInterval) clearInterval(this._antiTamperInterval);
+        if (this._lockCountdownInterval) clearInterval(this._lockCountdownInterval);
+
+        // 2. Hiển thị celebration overlay toàn màn hình
+        this._showCelebrationOverlay();
+
+        // 3. Sau hiệu ứng celebration, mở khoá từng section
+        setTimeout(() => {
+            this._unlockAllSections();
+            this._unlockNavLinks();
+        }, 2800);
+    }
+
+    /**
+     * Tạo celebration overlay toàn màn hình
+     */
+    _showCelebrationOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'celebration-overlay';
+        overlay.id = 'celebration-overlay';
+
+        // Tạo particles
+        let particles = '';
+        const emojis = ['🎉', '🎊', '🌸', '💖', '✨', '🎂', '🎁', '💕', '⭐', '🌟', '🎆', '🎇'];
+        for (let i = 0; i < 40; i++) {
+            const emoji = emojis[i % emojis.length];
+            const x = Math.random() * 100;
+            const delay = Math.random() * 2;
+            const dur = 2 + Math.random() * 2;
+            const size = 0.8 + Math.random() * 1.2;
+            particles += `<span class="celeb-particle" style="left:${x}%;animation-delay:${delay}s;animation-duration:${dur}s;font-size:${size}rem">${emoji}</span>`;
+        }
+
+        overlay.innerHTML = `
+            <div class="celeb-particles">${particles}</div>
+            <div class="celeb-content">
+                <div class="celeb-sparkle">✨</div>
+                <h2 class="celeb-title">🎂 Happy Birthday! 🎂</h2>
+                <p class="celeb-subtitle">Nội dung đã được mở khoá!</p>
+                <p class="celeb-name">✦ Chúc mừng sinh nhật Trà Mi ✦</p>
+                <div class="celeb-hearts">💖💕💖</div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        requestAnimationFrame(() => overlay.classList.add('celeb-active'));
+
+        // Trigger confetti/fireworks nếu có
+        if (typeof window.triggerConfetti3D === 'function') {
+            window.triggerConfetti3D();
+        }
+        if (typeof window.triggerFireworks === 'function') {
+            setTimeout(() => window.triggerFireworks(12), 500);
+        }
+
+        // Ẩn celebration sau 5 giây
+        setTimeout(() => {
+            overlay.classList.add('celeb-fadeout');
+            setTimeout(() => overlay.remove(), 1000);
+        }, 5000);
+    }
+
+    /**
+     * Mở khoá tất cả sections: xoá overlay, khôi phục nội dung gốc
+     */
+    _unlockAllSections() {
+        this.lockedSectionIds.forEach((sectionId, index) => {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            // Delay stagger cho mỗi section
+            setTimeout(() => {
+                // Khôi phục nội dung gốc
+                const original = this._originalContents.get(sectionId);
+                if (original) {
+                    section.innerHTML = original;
+                }
+
+                // Xoá class locked
+                section.classList.remove('section-locked');
+
+                // Thêm animation mở khoá
+                section.classList.add('section-unlocking');
+                setTimeout(() => section.classList.remove('section-unlocking'), 1200);
+
+                // Re-init lucide icons cho section mới khôi phục
+                if (typeof lucide !== 'undefined') {
+                    try { lucide.createIcons({ nodes: [section] }); } catch(e) {}
+                }
+            }, index * 200);
+        });
+    }
+
+    /**
+     * Mở khoá nav links
+     */
+    _unlockNavLinks() {
+        this.lockedSectionIds.forEach(sectionId => {
+            const navLink = document.querySelector(`.nav a[href="#${sectionId}"]`);
+            if (!navLink) return;
+
+            navLink.classList.remove('nav-locked');
+            const badge = navLink.querySelector('.nav-lock-badge');
+            if (badge) badge.remove();
+        });
     }
 }

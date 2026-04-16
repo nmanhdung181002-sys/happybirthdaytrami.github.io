@@ -13,6 +13,8 @@ import { GalleryController } from '../../presentation/controllers/GalleryControl
 import { InteractiveController } from '../../presentation/controllers/InteractiveController.js';
 import { TimelineController } from '../../presentation/controllers/TimelineController.js';
 import { TimeLockController } from '../../presentation/controllers/TimeLockController.js';
+import { LetterTypewriterController } from '../../presentation/controllers/LetterTypewriterController.js';
+import { MicBlowController } from '../../presentation/controllers/MicBlowController.js';
 import { CatRenderer } from '../../presentation/renderers/CatRenderer.js';
 import { ChibiCatsRenderer } from '../../presentation/renderers/ChibiCatsRenderer.js';
 
@@ -58,6 +60,8 @@ export const container = {
         const timelineController = new TimelineController();
         const catRenderer = new CatRenderer();
         const chibiCatsRenderer = new ChibiCatsRenderer();
+        const letterTypewriter = new LetterTypewriterController();
+        const micBlowController = new MicBlowController();
 
         // TimeLock: khoá các section Gallery, Wishes, Letter, Send Love trước ngày 30/6
         const timeLockController = new TimeLockController(timeLockRule, [
@@ -78,6 +82,8 @@ export const container = {
         galleryController.init();
         interactiveController.init();
         timelineController.init();
+        letterTypewriter.init();
+        micBlowController.init();
 
         // Khởi động renderers / background
         try {
