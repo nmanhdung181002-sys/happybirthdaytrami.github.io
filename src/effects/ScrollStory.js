@@ -14,7 +14,7 @@
 const CHAPTERS = [
   {
     id: 'chapter-arrival',
-    icon: '🌸',
+    icon: 'flower-2',
     title: 'Xin Chào, Trà Mi',
     subtitle: 'Hãy cùng bước vào thế giới sinh nhật — nơi mọi điều kỳ diệu đang chờ đợi cô…',
     extra: `
@@ -40,14 +40,14 @@ const CHAPTERS = [
   },
   {
     id: 'chapter-about',
-    icon: '💫',
+    icon: 'sparkles',
     title: 'Về Trà Mi',
     subtitle: 'Một cô gái dịu dàng mà mạnh mẽ, mang theo nụ cười nhẹ nhàng có thể làm sáng cả ngày u ám nhất.',
     extra: `
       <div class="story-traits">
-        <span class="story-trait">🤍 Tâm hồn nhân hậu</span>
-        <span class="story-trait">⭐ Luôn tỏa sáng</span>
-        <span class="story-trait">🎵 Yêu âm nhạc & mèo</span>
+        <span class="story-trait"><i data-lucide="heart"></i> Tâm hồn nhân hậu</span>
+        <span class="story-trait"><i data-lucide="star"></i> Luôn tỏa sáng</span>
+        <span class="story-trait"><i data-lucide="music"></i> Yêu âm nhạc & mèo</span>
       </div>
       <div class="story-img-frame">
         <img src="images/about-img.jpg" alt="Trà Mi" class="story-img" loading="lazy">
@@ -60,14 +60,14 @@ const CHAPTERS = [
   },
   {
     id: 'chapter-cake',
-    icon: '🎂',
+    icon: 'cake',
     title: 'Chiếc Bánh Ngọt Ngào',
     subtitle: 'Một chiếc bánh sinh nhật dành riêng cho cô — ngọt ngào như chính nụ cười ấy. Hãy nhắm mắt và ước điều gì đó thật đẹp nhé!',
     extra: `
       <div class="story-deco">
-        <span class="story-candle">🕯️</span>
-        <span class="story-candle">🕯️</span>
-        <span class="story-candle">🕯️</span>
+        <span class="story-candle"><i data-lucide="flame"></i></span>
+        <span class="story-candle"><i data-lucide="flame"></i></span>
+        <span class="story-candle"><i data-lucide="flame"></i></span>
       </div>
       <p class="story-quote">"Mỗi ngọn nến là một ước mơ — hãy thổi thật mạnh!"</p>
     `,
@@ -77,22 +77,22 @@ const CHAPTERS = [
   },
   {
     id: 'chapter-memories',
-    icon: '📸',
+    icon: 'camera',
     title: 'Kỷ Niệm Đẹp',
     subtitle: 'Mỗi khoảnh khắc bên cô ấy đều nhẹ nhàng như cánh hoa mùa xuân — đáng trân trọng và không thể quên.',
     extra: `
       <div class="story-gallery">
         <div class="story-polaroid" style="--rot:-4deg">
           <img src="images/gallery-1.jpg" alt="Kỷ niệm 1" loading="lazy">
-          <span>Khoảnh khắc yêu 🌸</span>
+          <span>Khoảnh khắc yêu <i data-lucide="heart" class="polaroid-inline-icon"></i></span>
         </div>
         <div class="story-polaroid" style="--rot:3deg">
           <img src="images/gallery-2.jpg" alt="Kỷ niệm 2" loading="lazy">
-          <span>Ngày tháng rực rỡ ✨</span>
+          <span>Ngày tháng rực rỡ <i data-lucide="sparkles" class="polaroid-inline-icon"></i></span>
         </div>
         <div class="story-polaroid" style="--rot:-2deg">
           <img src="images/gallery-3-v2.jpg" alt="Kỷ niệm 3" loading="lazy">
-          <span>Nụ cười rạng rỡ 💕</span>
+          <span>Nụ cười rạng rỡ <i data-lucide="heart" class="polaroid-inline-icon"></i></span>
         </div>
       </div>
     `,
@@ -102,28 +102,28 @@ const CHAPTERS = [
   },
   {
     id: 'chapter-gifts',
-    icon: '🎁',
+    icon: 'gift',
     title: 'Những Món Quà Nhỏ',
     subtitle: 'Mỗi hộp quà mang một lời chúc rất thật — gửi từ trái tim đến cô.',
     extra: `
       <div class="story-wishes-grid">
         <div class="story-wish-card" style="--ac:#f43f5e">
-          <span class="swc-icon">❤️</span>
+          <span class="swc-icon"><i data-lucide="activity"></i></span>
           <span class="swc-label">Sức Khỏe</span>
           <span class="swc-text">Luôn mạnh mẽ bước đi trên mọi hành trình</span>
         </div>
         <div class="story-wish-card" style="--ac:#c084fc">
-          <span class="swc-icon">💜</span>
+          <span class="swc-icon"><i data-lucide="heart"></i></span>
           <span class="swc-label">Hạnh Phúc</span>
           <span class="swc-text">Được yêu thương đúng cách</span>
         </div>
         <div class="story-wish-card" style="--ac:#fbbf24">
-          <span class="swc-icon">⭐</span>
+          <span class="swc-icon"><i data-lucide="award"></i></span>
           <span class="swc-label">Thành Công</span>
           <span class="swc-text">Mọi ước mơ đều thành hiện thực</span>
         </div>
         <div class="story-wish-card" style="--ac:#34d399">
-          <span class="swc-icon">🍃</span>
+          <span class="swc-icon"><i data-lucide="leaf"></i></span>
           <span class="swc-label">Bình Yên</span>
           <span class="swc-text">Sống thư thái, yêu bản thân</span>
         </div>
@@ -135,20 +135,21 @@ const CHAPTERS = [
   },
   {
     id: 'chapter-wish',
-    icon: '💕',
+    icon: 'heart',
     title: 'Gửi Trà Mi Thân Mến',
     subtitle: '',
     extra: `
       <div class="story-letter">
+        <i data-lucide="mail" class="story-letter-badge"></i>
         <p class="story-letter-body">
           Sinh nhật không chỉ là thêm một tuổi — đó là một chương mới trong câu chuyện đẹp của cậu.<br><br>
           Tớ muốn cậu biết: cậu được yêu thương rất nhiều. Không phải vì cậu hoàn hảo, mà vì cậu là chính mình — chân thật và đáng trân trọng.<br><br>
-          Hãy luôn giữ nụ cười đó nhé, Trà Mi ơi! 🌸
+          Hãy luôn giữ nụ cười đó nhé, Trà Mi ơi! <i data-lucide="flower-2" class="inline-lucide-icon"></i>
         </p>
         <div class="story-letter-sig">
           <div class="story-sig-content">
             <div class="story-sig-text">
-              <span class="story-sig-name">Với tất cả tình yêu thương 💕</span>
+              <span class="story-sig-name">Với tất cả tình yêu thương <i data-lucide="heart" class="inline-lucide-icon"></i></span>
               <span class="story-sig-date">Ngày 30 tháng 6</span>
             </div>
             <svg class="wax-seal" viewBox="0 0 100 100" width="55" height="55">
@@ -169,7 +170,7 @@ const CHAPTERS = [
           </div>
         </div>
       </div>
-      <p class="story-final-wish">Chúc Trà Mi tuổi mới luôn hạnh phúc, tỏa sáng và yêu đời ✨</p>
+      <p class="story-final-wish">Chúc Trà Mi tuổi mới luôn hạnh phúc, tỏa sáng và yêu đời <i data-lucide="sparkles" class="inline-lucide-icon"></i></p>
     `,
     range: [0.85, 1.0],
     fadeRange: [0.85, 0.88, 0.96, 1.01],
@@ -207,7 +208,7 @@ export class ScrollStory {
       el.id = ch.id;
       el.className = `story-overlay story-${ch.align}`;
       el.innerHTML = `
-        <div class="story-icon">${ch.icon}</div>
+        <div class="story-icon"><i data-lucide="${ch.icon}"></i></div>
         <h2 class="story-title">${ch.title}</h2>
         ${ch.subtitle ? `<p class="story-subtitle">${ch.subtitle}</p>` : ''}
         ${ch.extra || ''}
@@ -236,7 +237,7 @@ export class ScrollStory {
       dot.className = 'chapter-dot';
       dot.title = ch.title;
       dot.dataset.index = i;
-      dot.innerHTML = `<span class="dot-tooltip">${ch.icon} ${ch.title}</span>`;
+      dot.innerHTML = `<span class="dot-tooltip"><i data-lucide="${ch.icon}"></i> ${ch.title}</span>`;
       
       dot.addEventListener('click', () => {
         if (this.cameraPath) {
@@ -259,10 +260,18 @@ export class ScrollStory {
     style.textContent = `
       /* ── STORY ICON ── */
       .story-icon {
-        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         margin-bottom: 8px;
         filter: drop-shadow(0 0 6px rgba(255,105,180,0.4));
         animation: story-icon-float 3s ease-in-out infinite;
+      }
+      .story-icon .lucide {
+        width: 32px;
+        height: 32px;
+        stroke-width: 1.8;
+        color: var(--candy-pink);
       }
       @keyframes story-icon-float {
         0%, 100% { transform: translateY(0) scale(1); }
@@ -320,6 +329,9 @@ export class ScrollStory {
         margin: 14px 0;
       }
       .story-trait {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         font-size: 0.72rem;
         padding: 5px 12px;
         background: rgba(255,255,255,0.06);
@@ -328,6 +340,12 @@ export class ScrollStory {
         color: rgba(255,255,255,0.75);
         letter-spacing: 0.5px;
         backdrop-filter: blur(4px);
+      }
+      .story-trait .lucide {
+        width: 13px;
+        height: 13px;
+        stroke-width: 2;
+        color: var(--candy-pink);
       }
 
       /* ── IMAGE IN OVERLAY ── */
@@ -356,8 +374,15 @@ export class ScrollStory {
 
       /* ── CANDLES ── */
       .story-candle {
-        font-size: 1.4rem;
+        display: inline-block;
         animation: candle-flicker 1.5s ease-in-out infinite alternate;
+      }
+      .story-candle .lucide {
+        width: 24px;
+        height: 24px;
+        stroke-width: 1.8;
+        color: var(--gold);
+        filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
       }
       .story-candle:nth-child(2) { animation-delay: 0.3s; }
       .story-candle:nth-child(3) { animation-delay: 0.7s; }
@@ -422,6 +447,15 @@ export class ScrollStory {
         font-weight: 400;
         letter-spacing: 0.5px;
       }
+      .polaroid-inline-icon {
+        width: 9px;
+        height: 9px;
+        stroke-width: 2.2;
+        color: var(--candy-pink);
+        margin-left: 2px;
+        vertical-align: middle;
+        display: inline-block;
+      }
 
       /* ── WISH CARDS GRID ── */
       .story-wishes-grid {
@@ -440,9 +474,17 @@ export class ScrollStory {
         backdrop-filter: blur(6px);
       }
       .swc-icon {
-        font-size: 1.2rem;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 24px;
         margin-bottom: 4px;
+      }
+      .swc-icon .lucide {
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+        color: var(--ac, var(--candy-pink));
       }
       .swc-label {
         display: block;
@@ -471,13 +513,24 @@ export class ScrollStory {
         position: relative;
         overflow: hidden;
       }
-      .story-letter::before {
-        content: '✉️';
+      .story-letter-badge {
         position: absolute;
-        top: 6px;
-        left: 12px;
-        font-size: 1.1rem;
+        top: 10px;
+        left: 14px;
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
+        color: var(--candy-pink);
         opacity: 0.5;
+      }
+      .inline-lucide-icon {
+        width: 12px;
+        height: 12px;
+        stroke-width: 2;
+        color: var(--candy-pink);
+        margin-left: 2px;
+        vertical-align: middle;
+        display: inline-block;
       }
       .story-letter-body {
         font-size: 0.82rem;
@@ -568,6 +621,15 @@ export class ScrollStory {
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease, transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .dot-tooltip .lucide {
+        width: 11px;
+        height: 11px;
+        stroke-width: 2;
+        color: var(--candy-pink);
       }
       .chapter-dot {
         position: relative;

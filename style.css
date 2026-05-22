@@ -808,6 +808,15 @@ html, body {
   height: 14px;
 }
 
+.inline-lucide-icon {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2;
+  vertical-align: -1px;
+  margin-right: 4px;
+  display: inline-block;
+}
+
 @media (max-width: 480px) {
   .time-btn-label {
     display: none;
