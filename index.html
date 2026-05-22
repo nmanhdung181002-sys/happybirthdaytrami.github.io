@@ -4,496 +4,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="dark">
   <meta name="description"
-    content="Chúc mừng sinh nhật Nguyễn Trà Mi – 30/06. Một người đặc biệt xứng đáng có ngày thật đặc biệt.">
+    content="Chúc mừng sinh nhật Nguyễn Trà Mi – 30/06. Một trải nghiệm 3D đặc biệt dành riêng cho bạn.">
   <title>Happy Birthday ✦ Trà Mi</title>
+
+  <!-- Font Preloads -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap">
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,300;1,700&family=Dancing+Script:wght@700&family=Inter:wght@300;400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=3">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js r160 + addons via importmap -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.435.0/dist/umd/lucide.min.js" defer></script>
 </head>
 
 <body>
-
-  <a href="#main" class="skip-link">Bỏ qua điều hướng</a>
-
-  <!-- Loader -->
+  <!-- Loading Screen -->
   <div id="loader" aria-hidden="true">
-    <!-- Particle ring ngoài cùng -->
-    <div class="loader-ring loader-ring--outer"></div>
-    <div class="loader-ring loader-ring--inner"></div>
-
-    <!-- Orbiting hearts -->
-    <div class="loader-orbits">
-      <span class="loader-orbit-heart" style="--orbit-i:0">♥</span>
-      <span class="loader-orbit-heart" style="--orbit-i:1">♡</span>
-      <span class="loader-orbit-heart" style="--orbit-i:2">♥</span>
-      <span class="loader-orbit-heart" style="--orbit-i:3">♡</span>
-      <span class="loader-orbit-heart" style="--orbit-i:4">✦</span>
-      <span class="loader-orbit-heart" style="--orbit-i:5">♥</span>
-    </div>
-
-    <!-- Radiance glow background -->
     <div class="loader-radiance"></div>
-
-    <!-- Tên chính giữa -->
     <div class="loader-center">
       <span class="loader-pre">✦ Happy Birthday ✦</span>
       <span class="loader-name">Trà Mi</span>
-      <span class="loader-sparkle">💖</span>
+      <span class="loader-sub">Preparing your surprise...</span>
     </div>
-
-    <!-- Floating mini particles -->
-    <div class="loader-particles">
-      <i style="--p-x:12%;--p-dur:3.2s;--p-del:0s;--p-size:4px"></i>
-      <i style="--p-x:28%;--p-dur:2.8s;--p-del:.5s;--p-size:3px"></i>
-      <i style="--p-x:45%;--p-dur:3.6s;--p-del:1.2s;--p-size:5px"></i>
-      <i style="--p-x:62%;--p-dur:2.5s;--p-del:.3s;--p-size:3px"></i>
-      <i style="--p-x:78%;--p-dur:3s;--p-del:.8s;--p-size:4px"></i>
-      <i style="--p-x:90%;--p-dur:3.4s;--p-del:1.5s;--p-size:3px"></i>
-      <i style="--p-x:5%;--p-dur:2.6s;--p-del:1s;--p-size:5px"></i>
-      <i style="--p-x:55%;--p-dur:3.1s;--p-del:.2s;--p-size:3px"></i>
-    </div>
-
-    <!-- Progress bar -->
     <div class="loader-progress">
-      <div class="loader-progress-bar"></div>
+      <div class="loader-progress-bar" id="loader-bar"></div>
     </div>
   </div>
 
+  <!-- 3D Canvas Container -->
+  <canvas id="scene-canvas"></canvas>
 
-  <div id="three-bg" aria-hidden="true"></div>
-
-
-
-
-  <!-- Floating Hearts (CSS-only ambient) -->
-  <div class="floating-hearts" aria-hidden="true">
-    <span class="fh" style="left:8%;--fh-size:0.9rem;--fh-dur:10s;--fh-delay:0s">♥</span>
-    <span class="fh" style="left:30%;--fh-size:1.1rem;--fh-dur:8s;--fh-delay:3s">♡</span>
-    <span class="fh" style="left:55%;--fh-size:0.8rem;--fh-dur:11s;--fh-delay:1.5s">♥</span>
-    <span class="fh" style="left:75%;--fh-size:1rem;--fh-dur:9s;--fh-delay:5s">♡</span>
-    <span class="fh" style="left:92%;--fh-size:0.85rem;--fh-dur:10s;--fh-delay:2.5s">♥</span>
-  </div>
-
-  <!-- Nav -->
-  <nav class="nav" role="navigation" aria-label="Điều hướng chính">
-    <div class="nav-in">
-      <a href="#hero" class="nav-logo" aria-label="Đầu trang"><span>TM</span></a>
-      <ul role="list">
-        <li><a href="#about" class="nav-a">Về Mi</a></li>
-        <li><a href="#faves" class="nav-a">Yêu Thích</a></li>
-        <li><a href="#gallery" class="nav-a">Kỷ Niệm</a></li>
-        <li><a href="#wishes" class="nav-a">Lời Chúc</a></li>
-        <li><a href="#letter" class="nav-a">Tâm Thư</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <main id="main">
-
-    <!-- ── HERO ── -->
-    <section id="hero" class="s-hero" aria-labelledby="h-title">
-      <div class="hero-bg">
-        <img id="hbg" src="images/hero-bg.jpg" alt="" width="1920" height="1080" fetchpriority="high">
-        <div class="hbg-scrim"></div>
-      </div>
-      <div class="hero-c">
-        <p class="eyebrow rev rfade" id="hero-eyebrow">✦ &nbsp;Happy Birthday&nbsp; ✦</p>
-        <h1 id="h-title" class="hero-name">
-          <span class="hn-first" aria-label="Nguyễn" data-split="Nguyễn"></span>
-          <strong class="hn-last" aria-label="Trà Mi" data-split="Trà Mi"></strong>
-        </h1>
-        <div class="hero-hr" aria-hidden="true"></div>
-        <div class="hero-meta rev rfade d4">
-          <time datetime="06-30" class="hero-date">30 &nbsp;tháng 6</time>
-          <span class="bull" aria-hidden="true">•</span>
-          <span class="hero-tag">Một người thật đặc biệt</span>
-        </div>
-        <!-- Countdown -->
-        <div class="cd-wrap rev rfade d5" aria-label="Đếm ngược đến sinh nhật">
-          <div class="cd" id="cd" role="timer">
-            <div class="cd-b"><span class="cd-n" id="cd-d">--</span><span class="cd-u">Ngày</span></div>
-            <span class="cd-sep" aria-hidden="true">:</span>
-            <div class="cd-b"><span class="cd-n" id="cd-h">--</span><span class="cd-u">Giờ</span></div>
-            <span class="cd-sep" aria-hidden="true">:</span>
-            <div class="cd-b"><span class="cd-n" id="cd-m">--</span><span class="cd-u">Phút</span></div>
-            <span class="cd-sep" aria-hidden="true">:</span>
-            <div class="cd-b"><span class="cd-n" id="cd-s">--</span><span class="cd-u">Giây</span></div>
-          </div>
-        </div>
-        <a href="#about" class="hero-cta rev rfade d6" aria-label="Khám phá">
-          <span>Khám Phá</span>
-          <svg class="cta-arrow" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"
-            viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
-          </svg>
-        </a>
-      </div>
-      <div class="petals" aria-hidden="true">
-        <span class="p" style="--d:0s;--x:6%">✦</span>
-        <span class="p" style="--d:1.8s;--x:20%">◆</span>
-        <span class="p" style="--d:3.2s;--x:38%">✧</span>
-        <span class="p" style="--d:0.6s;--x:58%">★</span>
-        <span class="p" style="--d:2.5s;--x:75%">✦</span>
-        <span class="p" style="--d:4s;--x:90%">◇</span>
-      </div>
-    </section>
-
-    <!-- ── ABOUT ── -->
-    <section id="about" class="s-about" aria-labelledby="about-h">
-      <div class="wrap">
-        <header class="sec-head">
-          <p class="eyebrow rev">✦ &nbsp;About Her&nbsp; ✦</p>
-          <h2 id="about-h" class="sec-title rev">Về Trà Mi</h2>
-        </header>
-        <div class="about-grid">
-          <div class="about-left rev">
-            <div class="photo-frame">
-              <img src="images/about-img.jpg" alt="Ảnh Nguyễn Trà Mi" width="480" height="600" loading="lazy">
-              <div class="photo-shine" aria-hidden="true"></div>
-              <div class="photo-badge"><i data-lucide="sparkles" aria-hidden="true"></i></div>
-            </div>
-            <!-- <div class="stat-row" aria-label="Đặc điểm nổi bật">
-              <div class="stat tilt-card"><span class="sn">∞</span><span class="sl">Yêu thương</span></div>
-              <div class="stat tilt-card"><span class="sn">100%</span><span class="sl">Chân thật</span></div>
-              <div class="stat tilt-card"><span class="sn"><i data-lucide="heart" aria-hidden="true"></i></span><span
-                  class="sl">Đáng yêu</span></div>
-            </div> -->
-          </div>
-          <div class="about-right rev d2">
-            <blockquote class="quote">
-              <p>"Cô ấy mang theo nụ cười có thể làm sáng cả một ngày u ám nhất."</p>
-            </blockquote>
-            <p class="body-text">Trà Mi là người con gái dịu dàng mà mạnh mẽ, yêu đời theo cách riêng của mình. Mỗi
-              khoảnh khắc bên cô ấy đều nhẹ nhàng như những cánh hoa mùa xuân.</p>
-            <p class="body-text">Sinh ra để tỏa sáng, sống để truyền cảm hứng — đó là Nguyễn Trà Mi.</p>
-            <ul class="traits" aria-label="Những điều đặc biệt">
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="heart"></i></span><span>Tâm hồn nhân
-                  hậu</span></li>
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="star"></i></span><span>Luôn tỏa
-                  sáng</span></li>
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="wind"></i></span><span>Tự do bay
-                  bổng</span></li>
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="coffee"></i></span><span>Sống chậm,
-                  cảm sâu</span></li>
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="music"></i></span><span>Yêu âm
-                  nhạc & mèooo</span></li>
-              <li class="trait tilt-card"><span aria-hidden="true"><i data-lucide="feather"></i></span><span>Dịu dàng,
-                  đáng yêu</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── FAVORITES (Polaroid Scatter) ── -->
-    <section id="faves" class="s-faves" aria-labelledby="faves-h">
-      <div class="wrap">
-        <header class="sec-head">
-          <p class="eyebrow rev">✦ &nbsp;Favorites&nbsp; ✦</p>
-          <h2 id="faves-h" class="sec-title rev">Những Điều Mi Thích</h2>
-          <p class="sec-sub rev d1">Mỗi thứ nhỏ bé đều kể một câu chuyện rất Mi.</p>
-        </header>
-        <div class="polaroid-scatter">
-          <div class="polaroid rev" style="--rot:-5deg">
-            <div class="pol-img"><img src="images/fav-meo.jpg" alt="Mèo và võ mèo" loading="lazy" width="300"
-                height="300"></div>
-            <p class="pol-cap">Mèo & võ mèo&hearts;</p>
-            <span class="pol-sticker">🧋</span>
-          </div>
-          <div class="polaroid rev d1" style="--rot:4deg">
-            <div class="pol-img"><img src="images/fav-grab.jpg" alt="Chạy grap" loading="lazy" width="300" height="300">
-            </div>
-            <p class="pol-cap">Chạy grap</p>
-            <span class="pol-sticker">🎬</span>
-          </div>
-          <div class="polaroid rev d2" style="--rot:-3deg">
-            <div class="pol-img"><img src="images/fav-atsayhi.jpg" alt="Anh trai say hi" loading="lazy" width="300"
-                height="300"></div>
-            <p class="pol-cap">Anh trai say hi</p>
-            <span class="pol-sticker">📖</span>
-          </div>
-          <div class="polaroid rev d1" style="--rot:6deg">
-            <div class="pol-img"><img src="images/fav-chef.jpg" alt="Đầu bếp" loading="lazy" width="300" height="300">
-            </div>
-            <p class="pol-cap">Đầu bếp</p>
-            <span class="pol-sticker">✈️</span>
-          </div>
-          <div class="polaroid rev d2" style="--rot:-4deg">
-            <div class="pol-img"><img src="images/fav-gamer.jpg" alt="Game thủ" loading="lazy" width="300" height="300">
-            </div>
-            <p class="pol-cap">Game thủ</p>
-            <span class="pol-sticker">🎵</span>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── GALLERY ── -->
-    <section id="gallery" class="s-gallery" aria-labelledby="gal-h">
-      <div class="wrap">
-        <header class="sec-head">
-          <p class="eyebrow rev">✦ &nbsp;Memories&nbsp; ✦</p>
-          <h2 id="gal-h" class="sec-title rev">Kỷ Niệm Đẹp</h2>
-          <p class="sec-sub rev d1">Mỗi khoảnh khắc là một báu vật không thể đánh đổi.</p>
-        </header>
-        <div class="mosaic" role="list">
-          <figure class="mo mo-lg rev" role="listitem" tabindex="0" data-index="0">
-            <img src="images/gallery-1.jpg" alt="Kỷ niệm 1" width="600" height="780" loading="lazy">
-            <figcaption class="mo-cap">Khoảnh khắc yêu 🌸</figcaption>
-          </figure>
-          <div class="mo-col mo-lg">
-            <figure class="mo rev d1" role="listitem" tabindex="0" data-index="1">
-              <img src="images/gallery-2.jpg" alt="Kỷ niệm 2" width="600" height="440" loading="lazy">
-              <figcaption class="mo-cap">Ngày tháng rực rỡ ✨</figcaption>
-            </figure>
-            <figure class="mo rev d2" role="listitem" tabindex="0" data-index="2">
-              <img src="images/gallery-3-v2.jpg" alt="Kỷ niệm 3" width="600" height="440" loading="lazy">
-              <figcaption class="mo-cap">Nụ cười rạng rỡ 💕</figcaption>
-            </figure>
-          </div>
-          <figure class="mo mo-lg rev d1" role="listitem" tabindex="0" data-index="3">
-            <img src="images/gallery-4.jpg" alt="Kỷ niệm 4" width="600" height="780" loading="lazy">
-            <figcaption class="mo-cap">Hành trình tương lai 🚀</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── WISHES ── -->
-    <section id="wishes" class="s-wishes" aria-labelledby="wish-h">
-      <div class="wrap">
-        <header class="sec-head">
-          <p class="eyebrow rev">✦ &nbsp;Wishes&nbsp; ✦</p>
-          <h2 id="wish-h" class="sec-title rev">Lời Chúc Từ Trái Tim</h2>
-          <p class="sec-sub rev d1">Gửi đến Mi những điều tốt đẹp nhất.</p>
-        </header>
-        <div class="wishes-g">
-          <article class="wc tilt-card rev" style="--ac:#f43f5e">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="activity" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Sức Khỏe</h3>
-            <p class="wc-text">Luôn nhiều sức khoẻ, thân thể khỏe mạnh để bước tiếp trên mọi hành trình của cuộc
-              đời.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-          <article class="wc tilt-card rev d1" style="--ac:#c084fc">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="heart" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Hạnh Phúc</h3>
-            <p class="wc-text">Tìm được một người quan tâm cô, biết chiều chuộng cô nhé, được yêu thương đúng cách.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-          <article class="wc tilt-card rev d2" style="--ac:#fbbf24">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="trending-up" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Thành Công</h3>
-            <p class="wc-text">Mọi ước mơ đều thành hiện thực.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-          <article class="wc tilt-card rev d1" style="--ac:#34d399">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="leaf" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Bình Yên</h3>
-            <p class="wc-text">Cuộc sống thư thái, biết yêu bản thân và tìm thấy vẻ đẹp trong từng khoảnh khắc nhỏ.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-          <article class="wc tilt-card rev d2" style="--ac:#60a5fa">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="music" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Đam Mê</h3>
-            <p class="wc-text">Theo đuổi mọi điều khiến cô vui.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-          <article class="wc tilt-card rev d3" style="--ac:#fb923c">
-            <div class="wc-glow" aria-hidden="true"></div>
-            <div class="wc-icon"><i data-lucide="sun" aria-hidden="true"></i></div>
-            <h3 class="wc-name">Tươi Sáng</h3>
-            <p class="wc-text">Mỗi ngày thức dậy là một ngày vui, là một bức tranh mới hiện ra mới mẻ vui vẻ.</p>
-            <div class="wc-shine" aria-hidden="true"></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── TIMELINE ── -->
-    <section id="timeline" class="s-tl" aria-labelledby="tl-h">
-      <div class="wrap">
-        <header class="sec-head">
-          <p class="eyebrow rev">✦ &nbsp;Her Story&nbsp; ✦</p>
-          <h2 id="tl-h" class="sec-title rev">Hành Trình Của Mi</h2>
-        </header>
-        <!-- Swiper Container -->
-        <div class="swiper timeline-swiper">
-          <div class="swiper-wrapper" aria-label="Dòng thời gian">
-            <div class="swiper-slide rev">
-              <div class="tl-card tilt-card">
-                <span class="tl-era">Thuở Bé</span>
-                <h3 class="tl-title">Cô Bé Đặc Biệt Ra Đời</h3>
-                <p class="tl-text">Ngày 30/6, thế giới đẹp hơn khi Trà Mi xuất hiện với đôi mắt sáng và nụ cười không ai
-                  quên.</p>
-              </div>
-            </div>
-            <div class="swiper-slide rev d1">
-              <div class="tl-card tilt-card">
-                <span class="tl-era">Thanh Xuân</span>
-                <h3 class="tl-title">Tháng Năm Học Trò</h3>
-                <p class="tl-text">Tuổi học sinh ngọt ngào, những trang sách và bài học đầu tiên về cuộc đời bắt đầu
-                  được viết nên.</p>
-              </div>
-            </div>
-            <div class="swiper-slide rev d2">
-              <div class="tl-card tilt-card">
-                <span class="tl-era">Trưởng Thành</span>
-                <h3 class="tl-title">Bay Theo Đam Mê</h3>
-                <p class="tl-text">Bước vào đời với bản lĩnh riêng, không ngại thử thách, không sợ khác biệt — đó là Trà
-                  Mi.</p>
-              </div>
-            </div>
-            <div class="swiper-slide rev d1">
-              <div class="tl-card tilt-card">
-                <span class="tl-era">Hôm Nay</span>
-                <h3 class="tl-title">Năm Tháng Rực Rỡ Nhất</h3>
-                <p class="tl-text">Mỗi ngày qua Mi đều trở nên đẹp hơn, mạnh mẽ hơn và đáng yêu hơn. Chúc mừng tuổi mới!
-                </p>
-              </div>
-            </div>
-            <div class="swiper-slide rev d2">
-              <div class="tl-card tilt-card">
-                <span class="tl-era">Tương Lai</span>
-                <h3 class="tl-title">Hành Trình Sắp Tới</h3>
-                <p class="tl-text">Cả một bầu trời rộng lớn đang chờ Mi chinh phục — với tình yêu và lời chúc từ mọi
-                  người.</p>
-              </div>
-            </div>
-          </div>
-          <!-- Phân trang 3D Swiper -->
-          <div class="swiper-pagination"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── LETTER ── -->
-    <section id="letter" class="s-letter" aria-labelledby="let-h">
-      <div class="wrap">
-        <div class="letter-card rev">
-          <div class="lc-corners" aria-hidden="true">
-            <span class="lcc lcc-tl">✦</span><span class="lcc lcc-tr">✦</span>
-            <span class="lcc lcc-bl">✦</span><span class="lcc lcc-br">✦</span>
-          </div>
-          <div class="lc-seal" aria-hidden="true"><i data-lucide="mail" aria-hidden="true"></i></div>
-          <p class="lc-eyebrow">Tâm Thư</p>
-          <h2 id="let-h" class="lc-title">Gửi Trà Mi Thân Mến</h2>
-          <div class="lc-rule" aria-hidden="true">— ✦ —</div>
-          <div class="lc-body">
-            <p class="lc-salute">Trà Mi thân mến,</p>
-            <p>Sinh nhật không chỉ là thêm một tuổi — đó là một chương mới trong câu chuyện đẹp của cậu. Mỗi năm qua đi
-              tớ thấy cậu không ngừng lớn lên, không ngừng tỏa sáng theo cách riêng của mình.</p>
-            <p>Trong ngày đặc biệt này, tớ muốn cậu biết: cậu được yêu thương rất nhiều. Không phải vì cậu hoàn hảo, mà
-              vì cậu là chính mình — chân thật và đáng trân trọng hơn bất cứ điều gì.</p>
-            <p>Hãy luôn giữ nụ cười đó nhé, Trà Mi ơi! Thế giới này đẹp hơn rất nhiều khi có cậu ở đây. 🌸</p>
-          </div>
-          <div class="lc-sig">
-            <div class="sig-deco" aria-hidden="true">— ✦ —</div>
-            <p class="sig-name">Với tất cả tình yêu thương 💕</p>
-            <time class="sig-date" datetime="06-30">Ngày 30 tháng 6</time>
-          </div>
-          <!-- CSS Cake -->
-          <div class="css-cake" role="img" aria-label="Bánh sinh nhật">
-            <div class="candles" id="cake-candles">
-              <div class="candle">
-                <div class="flame"></div>
-                <div class="wick"></div>
-              </div>
-              <div class="candle">
-                <div class="flame"></div>
-                <div class="wick"></div>
-              </div>
-              <div class="candle">
-                <div class="flame"></div>
-                <div class="wick"></div>
-              </div>
-            </div>
-            <div class="cake-body">
-              <div class="cake-top">✦ Happy Birthday ✦</div>
-              <div class="cake-m1"></div>
-              <div class="cake-m2"></div>
-              <div class="cake-plate"></div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── SEND LOVE ── -->
-    <section id="send-love" class="s-love" aria-labelledby="love-h">
-      <div class="wrap love-wrap">
-        <h2 id="love-h" class="love-title rev">Gửi Yêu Thương Đến Mi</h2>
-        <p class="love-sub rev d1">Nhấn nút bên dưới để gửi những điều tốt đẹp nhất ✨</p>
-        <button id="love-btn" class="love-btn rev d2">
-          <i data-lucide="heart" aria-hidden="true"></i>
-          <span>Gửi Yêu Thương</span>
-        </button>
-        <p class="love-note rev d3" id="love-note" hidden>Pháo hoa đã bay lên — lời chúc đã được gửi! 💕</p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="footer" role="contentinfo">
-    <div class="footer-in">
-      <p class="ft-name">Nguyễn Trà Mi</p>
-      <p class="ft-date"><time datetime="06-30">30 / 06</time></p>
-      <p class="ft-love">Made with ♥ just for you</p>
-    </div>
-  </footer>
-
-  <!-- Lightbox V2 — with prev/next/counter -->
-  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Xem ảnh" hidden>
-    <button id="lb-close" class="lb-close" aria-label="Đóng">
-      <i data-lucide="x" aria-hidden="true"></i>
-    </button>
-    <button id="lb-prev" class="lb-nav lb-prev" aria-label="Ảnh trước">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15 18l-6-6 6-6" />
-      </svg>
-    </button>
-    <button id="lb-next" class="lb-nav lb-next" aria-label="Ảnh tiếp">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M9 18l6-6-6-6" />
-      </svg>
-    </button>
-    <span id="lb-counter" class="lb-counter"></span>
-    <img id="lb-img" class="lb-img" src="" alt="Ảnh phóng to">
-    <p id="lb-cap" class="lb-cap"></p>
+  <!-- Scroll Hint (thin UI overlay) -->
+  <div id="scroll-hint" class="scroll-hint" hidden>
+    <span>Scroll to explore</span>
+    <i data-lucide="chevron-down"></i>
   </div>
 
   <!-- Music Player -->
   <div id="music-player" class="music-player" aria-label="Phát nhạc nền">
     <button id="music-toggle" class="music-btn" aria-label="Bật/tắt nhạc">
-      <i data-lucide="volume-x" id="music-icon-off" aria-hidden="true"></i>
-      <i data-lucide="volume-2" id="music-icon-on" aria-hidden="true" style="display:none"></i>
+      <i id="music-icon-off" data-lucide="volume-x"></i>
+      <i id="music-icon-on" data-lucide="volume-2" style="display:none"></i>
     </button>
-    <div class="music-bars" id="music-bars" aria-hidden="true">
-      <span></span><span></span><span></span><span></span>
-    </div>
   </div>
   <audio id="bg-music" loop preload="none">
     <source src="https://cdn.pixabay.com/audio/2022/10/18/audio_5220019853.mp3" type="audio/mpeg">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" type="audio/mpeg">
   </audio>
 
-  <script type="module" src="js/main.js" defer></script>
+  <!-- Countdown Timer -->
+  <div id="countdown-timer" class="countdown-timer" hidden>
+    <div class="countdown-label">✦ Còn bao lâu nữa? ✦</div>
+    <div class="countdown-blocks">
+      <div class="countdown-block"><span id="cd-days" class="cd-val">--</span><span class="cd-unit">ngày</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block"><span id="cd-hours" class="cd-val">--</span><span class="cd-unit">giờ</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block"><span id="cd-mins" class="cd-val">--</span><span class="cd-unit">phút</span></div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block"><span id="cd-secs" class="cd-val">--</span><span class="cd-unit">giây</span></div>
+    </div>
+    <div class="countdown-date">🎂 30 tháng 6</div>
+  </div>
+
+  <!-- Share Button -->
+  <div id="share-btn-container" class="share-container">
+    <button id="share-btn" class="share-btn" aria-label="Chia sẻ trang">
+      <i data-lucide="share-2"></i>
+      <span class="share-label">Chia sẻ</span>
+    </button>
+    <div id="share-toast" class="share-toast" hidden>Đã copy link! ✨</div>
+  </div>
+
+  <!-- Time of Day Control Panel -->
+  <div id="time-control-panel" class="time-control-container">
+    <!-- Main Toggle Button -->
+    <button id="time-toggle-btn" class="time-toggle-btn" aria-label="Bật/Tắt sáng tối">
+      <i id="time-toggle-icon" data-lucide="sun"></i>
+      <span id="time-toggle-label" class="time-btn-label">Tự động (Sáng)</span>
+    </button>
+    
+    <!-- Quick Preset Buttons -->
+    <div class="time-preset-buttons">
+      <button id="time-btn-light" class="time-preset-btn" title="Cố định Sáng" aria-label="Chế độ Sáng">
+        <i data-lucide="sun"></i>
+      </button>
+      <button id="time-btn-dark" class="time-preset-btn" title="Cố định Tối" aria-label="Chế độ Tối">
+        <i data-lucide="moon"></i>
+      </button>
+      <button id="time-btn-auto" class="time-preset-btn" title="Đồng bộ Giờ Thực" aria-label="Đồng bộ Tự động">
+        <i data-lucide="clock"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Entry point -->
+  <script type="module" src="src/main.js"></script>
 </body>
 
 </html>
