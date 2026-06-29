@@ -13,5 +13,5 @@ This checklist tracks your understanding of the problems, solutions, and concept
 - [x] **Layout Restructuring**: Why did we rearrange the control buttons horizontally at the top, move the countdown timer down, and hide the time presets/chapter dots?
 
 ## 3. Broader Context & Best Practices
-- [ ] **Three.js Mobile Optimization**: Why antialiasing is disabled on mobile and how pixel ratio clamping preserves performance.
-- [ ] **Viewport & Touch Interactions**: How touch events compare to mouse scrolls in scroll-based storytellers.
+- [x] **Three.js Mobile Optimization**: Why antialiasing is disabled on mobile and how pixel ratio clamping preserves performance.
+- [x] **Viewport & Touch Interactions**: How touch events compare to mouse scrolls in scroll-based storytellers.

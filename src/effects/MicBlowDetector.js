@@ -58,7 +58,7 @@ export class MicBlowDetector {
     this._injectStyles();
 
     this._onChapterChange = (e) => {
-      if (e.detail.name === 'CAKE') {
+      if (e.detail.chapter >= 2) {
         this.container.classList.add('visible-chapter');
       } else {
         this.container.classList.remove('visible-chapter');

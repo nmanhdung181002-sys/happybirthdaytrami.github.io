@@ -142,14 +142,14 @@ const CHAPTERS = [
       <div class="story-letter">
         <i data-lucide="mail" class="story-letter-badge"></i>
         <p class="story-letter-body">
-          Sinh nhật không chỉ là thêm một tuổi — đó là một chương mới trong câu chuyện đẹp của cậu.<br><br>
-          Tớ muốn cậu biết: cậu được yêu thương rất nhiều. Không phải vì cậu hoàn hảo, mà vì cậu là chính mình — chân thật và đáng trân trọng.<br><br>
-          Hãy luôn giữ nụ cười đó nhé, Trà Mi ơi! <i data-lucide="flower-2" class="inline-lucide-icon"></i>
+          Sinh nhật không chỉ là thêm một tuổi — đó là một chương mới trong câu chuyện đẹp của cô.<br><br>
+          Cô được mọi người yêu thương rất nhiều. Không phải vì cô hoàn hảo, mà vì cô là chính mình — chân thật và đáng trân trọng.<br><br>
+          Hãy luôn giữ nụ cười đó nhé, Cô Mi! <i data-lucide="flower-2" class="inline-lucide-icon"></i>
         </p>
         <div class="story-letter-sig">
           <div class="story-sig-content">
             <div class="story-sig-text">
-              <span class="story-sig-name">Với tất cả tình yêu thương <i data-lucide="heart" class="inline-lucide-icon"></i></span>
+              <span class="story-sig-name">Chúc mừng sinh nhật cô Mi<i data-lucide="heart" class="inline-lucide-icon"></i></span>
               <span class="story-sig-date">Ngày 30 tháng 6</span>
             </div>
             <svg class="wax-seal" viewBox="0 0 100 100" width="55" height="55">
@@ -170,7 +170,7 @@ const CHAPTERS = [
           </div>
         </div>
       </div>
-      <p class="story-final-wish">Chúc Trà Mi tuổi mới luôn hạnh phúc, tỏa sáng và yêu đời <i data-lucide="sparkles" class="inline-lucide-icon"></i></p>
+      <p class="story-final-wish">Chúc cô tuổi mới luôn hạnh phúc, tỏa sáng và yêu đời <i data-lucide="sparkles" class="inline-lucide-icon"></i></p>
     `,
     range: [0.85, 1.0],
     fadeRange: [0.85, 0.88, 0.96, 1.01],
@@ -238,7 +238,7 @@ export class ScrollStory {
       dot.title = ch.title;
       dot.dataset.index = i;
       dot.innerHTML = `<span class="dot-tooltip"><i data-lucide="${ch.icon}"></i> ${ch.title}</span>`;
-      
+
       dot.addEventListener('click', () => {
         if (this.cameraPath) {
           this.cameraPath.scrollToChapter(i);
@@ -909,7 +909,7 @@ export class ScrollStory {
       // Slide-in + scale transform for smooth entrance
       const translateY = (1 - opacity) * 25;
       const scale = 0.95 + opacity * 0.05;
-      
+
       const isMobile = window.innerWidth < 768;
       if (isMobile) {
         el.style.transform = `translateX(-50%) translateY(${translateY}px) scale(${scale.toFixed(3)})`;

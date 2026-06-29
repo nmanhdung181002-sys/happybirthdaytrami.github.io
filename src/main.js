@@ -251,7 +251,10 @@ async function init() {
 
   // 11. Post-processing (bloom + film grain + vignette)
   const postFx = new PostProcessing();
-  postFx.init(renderer, scene, camera);
+  const usePostProcessing = !sceneSetup.isMobile;
+  if (usePostProcessing) {
+    postFx.init(renderer, scene, camera);
+  }
 
   // 12. Scroll Story (chapter overlays + progress bar)
   const scrollStory = new ScrollStory();
@@ -272,7 +275,9 @@ async function init() {
 
   // Resize handler for post-processing composer
   window.addEventListener('resize', () => {
-    postFx.resize(window.innerWidth, window.innerHeight);
+    if (usePostProcessing) {
+      postFx.resize(window.innerWidth, window.innerHeight);
+    }
   }, { passive: true });
 
   setLoadProgress(90);
@@ -363,8 +368,12 @@ async function init() {
     }
 
     // Post-processing update + render
-    postFx.update(clock.elapsed);
-    postFx.render();
+    if (usePostProcessing) {
+      postFx.update(clock.elapsed);
+      postFx.render();
+    } else {
+      renderer.render(scene, camera);
+    }
   }
 
   // 11. Visibility Change (pause/resume)
