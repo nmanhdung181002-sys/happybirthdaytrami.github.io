@@ -79,12 +79,12 @@ const CHAPTERS = [
     id: 'chapter-memories',
     icon: 'camera',
     title: 'Kỷ Niệm Đẹp',
-    subtitle: 'Mỗi khoảnh khắc bên cô ấy đều nhẹ nhàng như cánh hoa mùa xuân — đáng trân trọng và không thể quên.',
+    subtitle: 'Mỗi khoảnh khắc cô ấy đều nhẹ nhàng như cánh hoa mùa xuân — đáng trân trọng và không thể quên.',
     extra: `
       <div class="story-gallery">
         <div class="story-polaroid" style="--rot:-4deg">
           <img src="images/gallery-1.jpg" alt="Kỷ niệm 1" loading="lazy">
-          <span>Khoảnh khắc yêu <i data-lucide="heart" class="polaroid-inline-icon"></i></span>
+          <span>Khoảnh khắc vui <i data-lucide="heart" class="polaroid-inline-icon"></i></span>
         </div>
         <div class="story-polaroid" style="--rot:3deg">
           <img src="images/gallery-2.jpg" alt="Kỷ niệm 2" loading="lazy">
