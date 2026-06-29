@@ -9,23 +9,23 @@
  */
 
 import * as THREE from 'three';
-import { SceneSetup } from './scene/SceneSetup.js';
-import { Environment } from './scene/Environment.js';
-import { CameraPath } from './scene/CameraPath.js';
-import { BirthdayCake } from './objects/BirthdayCake.js';
-import { BirthdayText } from './objects/BirthdayText.js';
-import { Balloons } from './objects/Balloons.js';
-import { GiftBoxes } from './objects/GiftBoxes.js';
-import { MagicalEffects } from './effects/MagicalEffects.js';
-import { ConfettiSystem } from './effects/ConfettiSystem.js';
-import { SparkleTrail } from './effects/SparkleTrail.js';
-import { PostProcessing } from './effects/PostProcessing.js';
-import { ScrollStory } from './effects/ScrollStory.js';
-import { InteractionManager } from './effects/InteractionManager.js';
-import { MicBlowDetector } from './effects/MicBlowDetector.js';
-import { YukiCat } from './objects/YukiCat.js';
-import { ShadowCat } from './objects/ShadowCat.js';
-import { MochiCat } from './objects/MochiCat.js';
+import { SceneSetup } from './scene/SceneSetup.js?v=2';
+import { Environment } from './scene/Environment.js?v=2';
+import { CameraPath } from './scene/CameraPath.js?v=2';
+import { BirthdayCake } from './objects/BirthdayCake.js?v=2';
+import { BirthdayText } from './objects/BirthdayText.js?v=2';
+import { Balloons } from './objects/Balloons.js?v=2';
+import { GiftBoxes } from './objects/GiftBoxes.js?v=2';
+import { MagicalEffects } from './effects/MagicalEffects.js?v=2';
+import { ConfettiSystem } from './effects/ConfettiSystem.js?v=2';
+import { SparkleTrail } from './effects/SparkleTrail.js?v=2';
+import { PostProcessing } from './effects/PostProcessing.js?v=2';
+import { ScrollStory } from './effects/ScrollStory.js?v=2';
+import { InteractionManager } from './effects/InteractionManager.js?v=2';
+import { MicBlowDetector } from './effects/MicBlowDetector.js?v=2';
+import { YukiCat } from './objects/YukiCat.js?v=2';
+import { ShadowCat } from './objects/ShadowCat.js?v=2';
+import { MochiCat } from './objects/MochiCat.js?v=2';
 
 // ── LOADING PROGRESS ──
 const loaderEl = document.getElementById('loader');
