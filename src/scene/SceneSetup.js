@@ -290,6 +290,7 @@ export class SceneSetup {
     // ── RESIZE ──
     this._onResize = this._handleResize.bind(this);
     window.addEventListener('resize', this._onResize, { passive: true });
+    this._handleResize();
 
     return { scene: this.scene, camera: this.camera, renderer: this.renderer };
   }
@@ -565,7 +566,17 @@ export class SceneSetup {
   _handleResize() {
     const w = window.innerWidth;
     const h = window.innerHeight;
-    this.camera.aspect = w / h;
+    const aspect = w / h;
+    this.camera.aspect = aspect;
+    
+    // Scale vertical FOV on narrow aspect ratios to maintain constant horizontal view
+    if (aspect < 1) {
+      const baseFovRad = (CAMERA_FOV * Math.PI) / 180;
+      this.camera.fov = (2 * Math.atan(Math.tan(baseFovRad / 2) / aspect) * 180) / Math.PI;
+    } else {
+      this.camera.fov = CAMERA_FOV;
+    }
+
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
   }

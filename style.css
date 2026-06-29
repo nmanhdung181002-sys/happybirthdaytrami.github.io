@@ -357,7 +357,7 @@ html, body {
   }
 
   .chapter-dots {
-    right: 10px;
+    display: none !important;
   }
 }
 
@@ -659,9 +659,53 @@ html, body {
    RESPONSIVE — COUNTDOWN + SHARE
    ═══════════════════════════════════════════════ */
 @media (max-width: 768px) {
+  /* Unified icon buttons on mobile */
+  .music-btn,
+  .share-btn,
+  .time-toggle-btn,
+  .story-toggle-btn {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-radius: 50% !important;
+  }
+  
+  .music-btn .lucide,
+  .share-btn .lucide,
+  .time-toggle-btn .lucide,
+  .story-toggle-btn .lucide {
+    margin: 0 !important;
+  }
+
+  .music-player {
+    top: 15px;
+    right: 15px;
+  }
+
+  .share-container {
+    top: 15px;
+    right: 57px;
+  }
+
+  .time-control-container {
+    top: 15px;
+    right: 99px;
+  }
+
+  .story-toggle-btn {
+    top: 15px;
+    left: 15px;
+  }
+
   .countdown-timer {
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
     padding: 8px 16px;
   }
+
   .cd-val {
     font-size: clamp(1rem, 3vw, 1.3rem);
   }
@@ -683,9 +727,6 @@ html, body {
   }
   .share-label {
     display: none;
-  }
-  .share-btn {
-    padding: 8px 10px;
   }
 }
 
@@ -817,15 +858,14 @@ html, body {
   display: inline-block;
 }
 
+@media (max-width: 768px) {
+  .time-preset-buttons {
+    display: none !important;
+  }
+}
+
 @media (max-width: 480px) {
   .time-btn-label {
     display: none;
-  }
-  .time-toggle-btn {
-    padding: 8px 10px;
-  }
-  .time-control-container {
-    top: 114px;
-    right: 15px;
   }
 }

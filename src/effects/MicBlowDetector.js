@@ -56,6 +56,16 @@ export class MicBlowDetector {
 
     this._createUI();
     this._injectStyles();
+
+    this._onChapterChange = (e) => {
+      if (e.detail.name === 'CAKE') {
+        this.container.classList.add('visible-chapter');
+      } else {
+        this.container.classList.remove('visible-chapter');
+        this._stopMic();
+      }
+    };
+    window.addEventListener('chapterchange', this._onChapterChange);
   }
 
   // ═══════════════════════════════════════════════
@@ -105,11 +115,14 @@ export class MicBlowDetector {
         bottom: 24px;
         left: 20px;
         z-index: 55;
-        display: flex;
+        display: none;
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
         pointer-events: auto;
+      }
+      .mic-blow-container.visible-chapter {
+        display: flex !important;
       }
 
       /* ── MIC BUTTON ── */
@@ -201,7 +214,30 @@ export class MicBlowDetector {
       }
 
       /* ── RESPONSIVE ── */
+      @media (max-width: 768px) {
+        .mic-blow-container {
+          left: 50% !important;
+          bottom: 240px !important;
+          transform: translateX(-50%) !important;
+          align-items: center !important;
+          width: 90% !important;
+          max-width: 320px !important;
+        }
+        .mic-blow-btn {
+          margin: 0 auto !important;
+        }
+        .mic-blow-meter {
+          margin: 0 auto !important;
+        }
+        .mic-blow-status {
+          text-align: center !important;
+        }
+      }
+
       @media (max-width: 480px) {
+        .mic-blow-container {
+          bottom: 230px !important;
+        }
         .mic-blow-btn {
           padding: 8px 16px;
           font-size: 0.72rem;
@@ -591,5 +627,8 @@ export class MicBlowDetector {
   dispose() {
     this._stopMic();
     if (this.container) this.container.remove();
+    if (this._onChapterChange) {
+      window.removeEventListener('chapterchange', this._onChapterChange);
+    }
   }
 }

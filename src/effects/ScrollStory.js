@@ -642,8 +642,19 @@ export class ScrollStory {
       /* ── RESPONSIVE ── */
       @media (max-width: 768px) {
         .story-overlay {
-          max-width: 88vw;
-          padding: 18px 20px;
+          width: 90% !important;
+          max-width: 440px !important;
+          padding: 16px 20px;
+          left: 50% !important;
+          bottom: 30px !important;
+          top: auto !important;
+          right: auto !important;
+          transform: translateX(-50%) !important;
+          text-align: center;
+          background: rgba(10, 0, 21, 0.45) !important;
+          backdrop-filter: blur(20px) !important;
+          -webkit-backdrop-filter: blur(20px) !important;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 105, 180, 0.1) !important;
         }
         .story-gallery {
           gap: 6px;
@@ -655,7 +666,7 @@ export class ScrollStory {
           height: 60px;
         }
         .story-wishes-grid {
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 1fr !important;
           gap: 6px;
         }
         .story-img-frame {
@@ -665,14 +676,57 @@ export class ScrollStory {
       }
 
       @media (max-width: 480px) {
+        .story-overlay {
+          width: 92% !important;
+          padding: 12px 16px;
+          bottom: 20px !important;
+        }
         .story-title {
-          font-size: 1.2rem;
+          font-size: 1.1rem;
         }
         .story-subtitle {
-          font-size: 0.75rem;
+          font-size: 0.7rem;
+        }
+        .story-icon .lucide {
+          width: 24px;
+          height: 24px;
         }
         .story-wishes-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 5px;
+        }
+        .story-wish-card {
+          padding: 6px 8px;
+        }
+        .swc-icon {
+          height: 18px;
+          margin-bottom: 2px;
+        }
+        .swc-icon .lucide {
+          width: 16px;
+          height: 16px;
+        }
+        .swc-label {
+          font-size: 0.65rem;
+        }
+        .swc-text {
+          font-size: 0.55rem;
+          line-height: 1.2;
+        }
+        .story-letter {
+          padding: 12px 14px;
+          margin: 8px 0;
+        }
+        .story-letter-body {
+          font-size: 0.72rem;
+          line-height: 1.5;
+        }
+        .story-sig-name {
+          font-size: 0.8rem;
+        }
+        .wax-seal {
+          width: 38px;
+          height: 38px;
         }
         .story-polaroid {
           width: 70px;
@@ -817,6 +871,19 @@ export class ScrollStory {
       this.progressBar.style.width = `${progress * 100}%`;
     }
 
+    // Fade out scroll hint as user scrolls
+    const hint = document.getElementById('scroll-hint');
+    if (hint) {
+      if (progress > 0.05) {
+        const opacity = Math.max(0, 1 - (progress - 0.05) * 10);
+        hint.style.opacity = opacity.toFixed(2);
+        hint.style.display = opacity <= 0.01 ? 'none' : '';
+      } else {
+        hint.style.opacity = '1';
+        hint.style.display = '';
+      }
+    }
+
     // Update each chapter overlay
     CHAPTERS.forEach((ch, i) => {
       const el = this.overlays[i];
@@ -843,7 +910,10 @@ export class ScrollStory {
       const translateY = (1 - opacity) * 25;
       const scale = 0.95 + opacity * 0.05;
       
-      if (ch.align === 'center') {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
+        el.style.transform = `translateX(-50%) translateY(${translateY}px) scale(${scale.toFixed(3)})`;
+      } else if (ch.align === 'center') {
         el.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) scale(${scale.toFixed(3)})`;
       } else {
         el.style.transform = `translateY(${translateY}px) scale(${scale.toFixed(3)})`;
