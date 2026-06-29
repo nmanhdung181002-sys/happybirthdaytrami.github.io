@@ -23,6 +23,7 @@ import { PostProcessing } from './effects/PostProcessing.js?v=2';
 import { ScrollStory } from './effects/ScrollStory.js?v=2';
 import { InteractionManager } from './effects/InteractionManager.js?v=2';
 import { MicBlowDetector } from './effects/MicBlowDetector.js?v=2';
+import { GLBCatManager } from './objects/GLBCatManager.js?v=2';
 import { YukiCat } from './objects/YukiCat.js?v=2';
 import { ShadowCat } from './objects/ShadowCat.js?v=2';
 import { MochiCat } from './objects/MochiCat.js?v=2';
@@ -103,24 +104,28 @@ async function init() {
   const magicFx = new MagicalEffects();
   magicFx.init(scene);
 
-  // ── CATS — parented to islandGroup so they float with the island ──
-  // Island local top surface Y = ISLAND_HEIGHT/2 + 0.4 (half of 0.8 thick top cylinder)
-  const ISLAND_SURFACE_Y = 2.9; // in island-local space
-  const ISLAND_ROAM_RADIUS = 8;  // stay within this radius
-
-  // All cats get added to islandGroup instead of scene
+  // ── GLB CATS — 6 real 3D cat models loaded from /models/ ──
   const islandGroup = environment.islandGroup;
+  const catManager = new GLBCatManager();
+  await catManager.init(islandGroup, (loaded, total) => {
+    // Update load progress based on cat loading (85% → 90%)
+    const catProgress = 85 + (loaded / total) * 5;
+    setLoadProgress(catProgress);
+  });
 
-  // Yuki — sleeping loaf, stays still near front
+  // ── OLD PROCEDURAL CATS (Yuki, Shadow, Mochi) — kept alongside GLB cats ──
+  const ISLAND_SURFACE_Y = 2.9;
+  const ISLAND_ROAM_RADIUS = 8;
+
+  // Yuki — sleeping white loaf, stays still near cake
   const yukiCat = new YukiCat();
   yukiCat.init(scene);
-  // Re-parent: remove from scene, add to islandGroup
   scene.remove(yukiCat.group);
   islandGroup.add(yukiCat.group);
   yukiCat.group.position.set(1.5, ISLAND_SURFACE_Y, 4.0);
   yukiCat.group.rotation.y = Math.PI * 0.05;
 
-  // Shadow — standing, roams slowly & mysteriously
+  // Shadow — sleek black standing cat
   const shadowCat = new ShadowCat();
   shadowCat.init(scene);
   scene.remove(shadowCat.group);
@@ -128,7 +133,7 @@ async function init() {
   shadowCat.group.position.set(3.0, ISLAND_SURFACE_Y, -2.0);
   shadowCat.group.rotation.y = -Math.PI * 0.3;
 
-  // Mochi — chubby, waddles around cheerfully
+  // Mochi — orange tabby, walks around
   const mochiCat = new MochiCat();
   mochiCat.init(scene);
   scene.remove(mochiCat.group);
@@ -136,37 +141,26 @@ async function init() {
   mochiCat.group.position.set(-3.5, ISLAND_SURFACE_Y, 1.5);
   mochiCat.group.rotation.y = Math.PI * 0.15;
 
-  // ── Cat Roaming System ──
-  // Each roaming cat picks random waypoints and walks there
+  // Roaming system for Shadow & Mochi
   const catRoamers = [
     {
-      cat: mochiCat,
-      speed: 0.8,           // Mochi waddles fast
+      cat: mochiCat, speed: 0.8,
       target: new THREE.Vector3(-3.5, ISLAND_SURFACE_Y, 1.5),
-      waitTimer: 0,
-      waitDuration: 2 + Math.random() * 3,
-      state: 'idle',        // 'idle' | 'walking'
-      bobPhase: 0,          // walking bob animation
+      waitTimer: 0, waitDuration: 2 + Math.random() * 3,
+      state: 'idle', bobPhase: 0,
     },
     {
-      cat: shadowCat,
-      speed: 0.5,           // Shadow moves slowly, deliberately
+      cat: shadowCat, speed: 0.5,
       target: new THREE.Vector3(3.0, ISLAND_SURFACE_Y, -2.0),
-      waitTimer: 0,
-      waitDuration: 4 + Math.random() * 4,
-      state: 'idle',
-      bobPhase: 0,
+      waitTimer: 0, waitDuration: 4 + Math.random() * 4,
+      state: 'idle', bobPhase: 0,
     },
   ];
 
   function pickNewTarget(roamer) {
     const angle = Math.random() * Math.PI * 2;
     const r = 2 + Math.random() * (ISLAND_ROAM_RADIUS - 2);
-    roamer.target.set(
-      Math.cos(angle) * r,
-      ISLAND_SURFACE_Y,
-      Math.sin(angle) * r,
-    );
+    roamer.target.set(Math.cos(angle) * r, ISLAND_SURFACE_Y, Math.sin(angle) * r);
     roamer.state = 'walking';
     roamer.bobPhase = 0;
   }
@@ -175,9 +169,7 @@ async function init() {
     catRoamers.forEach(roamer => {
       const group = roamer.cat.group;
       const pos = group.position;
-
       if (roamer.state === 'idle') {
-        // Wait at current spot
         roamer.waitTimer += delta;
         if (roamer.waitTimer >= roamer.waitDuration) {
           roamer.waitTimer = 0;
@@ -185,53 +177,31 @@ async function init() {
           pickNewTarget(roamer);
         }
       } else if (roamer.state === 'walking') {
-        // Move toward target
         const dx = roamer.target.x - pos.x;
         const dz = roamer.target.z - pos.z;
         const dist = Math.sqrt(dx * dx + dz * dz);
-
         if (dist < 0.2) {
-          // Arrived at target
           roamer.state = 'idle';
           roamer.waitTimer = 0;
-          // Reset Y to surface
           pos.y = ISLAND_SURFACE_Y;
           return;
         }
-
-        // Smooth rotation toward target (face direction of movement)
         const targetAngle = Math.atan2(dx, dz);
-        let currentAngle = group.rotation.y;
-        // Shortest angle diff
-        let angleDiff = targetAngle - currentAngle;
+        let angleDiff = targetAngle - group.rotation.y;
         while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
         while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
         group.rotation.y += angleDiff * Math.min(delta * 3.0, 1.0);
-
-        // Move forward
         const moveSpeed = roamer.speed * delta;
-        const moveX = (dx / dist) * moveSpeed;
-        const moveZ = (dz / dist) * moveSpeed;
-        pos.x += moveX;
-        pos.z += moveZ;
-
-        // Walking bob (up-down bounce)
+        pos.x += (dx / dist) * moveSpeed;
+        pos.z += (dz / dist) * moveSpeed;
         roamer.bobPhase += delta * roamer.speed * 8;
-        const bob = Math.abs(Math.sin(roamer.bobPhase)) * 0.08;
-        pos.y = ISLAND_SURFACE_Y + bob;
-
-        // Clamp to island radius
+        pos.y = ISLAND_SURFACE_Y + Math.abs(Math.sin(roamer.bobPhase)) * 0.08;
         const fromCenter = Math.sqrt(pos.x * pos.x + pos.z * pos.z);
         if (fromCenter > ISLAND_ROAM_RADIUS) {
           pos.x *= ISLAND_ROAM_RADIUS / fromCenter;
           pos.z *= ISLAND_ROAM_RADIUS / fromCenter;
-          // Pick new target back toward center
           pickNewTarget(roamer);
-          roamer.target.set(
-            (Math.random() - 0.5) * 4,
-            ISLAND_SURFACE_Y,
-            (Math.random() - 0.5) * 4,
-          );
+          roamer.target.set((Math.random() - 0.5) * 4, ISLAND_SURFACE_Y, (Math.random() - 0.5) * 4);
         }
       }
     });
@@ -361,6 +331,7 @@ async function init() {
       magicFx.update(delta, clock.elapsed);
       confetti.update(delta, clock.elapsed);
       sparkleTrail.update(delta, clock.elapsed, camera);
+      catManager.update(delta, clock.elapsed);
       yukiCat.update(delta, clock.elapsed);
       shadowCat.update(delta, clock.elapsed);
       mochiCat.update(delta, clock.elapsed);
